@@ -1,4 +1,7 @@
+import os
+
 from flask import Flask, render_template, request, redirect
+from werkzeug.utils import secure_filename
 
 from database import session, Document
 
@@ -35,6 +38,24 @@ def upload_file():
     if 'file' not in request.files:
         return redirect(request.url)
     file = request.files['file']
+    if file.filename == '':
+        return redirect(request.url)
+    if file:
+        filename = secure_filename(file.filename)
+        file.save(filename)
+        read_file(filename)
+    return render_template("file_uploaded.html")
+
+
+def read_file(file):
+    with open(file, "r") as uploaded_file:
+        lines = uploaded_file.readlines()
+
+    with open(f"out_{file}", "w") as output_file:
+        for line in lines:
+            modified_line = line.replace(" ", "").replace("-", "")
+            output_file.write(modified_line)
+
 
 
 if __name__ == '__main__':
