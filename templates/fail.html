@@ -7,26 +7,45 @@
     <title>ПОИСК СНИЛС</title>
     <style>
 
-        h1 {
-            text-align: left;
-            position: absolute;
-            width: 100%;
-            bottom: 90%;
+    h1 {
+        text-align: left;
+        position: absolute;
+        width: 100%;
+        bottom: 90%;
         }
-        form {
-            text-align: left;
-            position: absolute;
-            width: 100%;
-            bottom: 85%;
-        }
-        h2 {
-            text-align: center;
-            position: absolute;
-            width: 100%;
-            bottom: 75%;
-            right: 42%;
+    h2 {
+        text-align: left;
+        position: absolute;
+        width: 50%;
+        bottom: 40%;
+        top: 230px;
+    }
+    form {
+        text-align: left;
+        position: absolute;
+        width: 100%;
+        bottom: 88%;
+    }
+    .clear-button {
+        display: block;
+        position: absolute;
+        top: 50px;
+    }
+    .clear-button + span {
+        display: block;
+        position: absolute;
+        top: 50px;
+        left: 80px;
 
-        }
+    }
+    .submit-button {
+        display: block;
+        position: absolute;
+        top: 50px;
+        left: 350px;
+
+    }
+
     </style>
 </head>
 <body>
@@ -37,7 +56,29 @@
         <label for="inputField">ВВЕДИТЕ СНИЛС:</label>
         <input type="text" id="inputField" name="inputField">
         <button type="submit">НАЙТИ</button>
+
     </form>
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+         <input type="file" id="fileInput" name="file" style="display: none;" onchange="updateFileName()">
+        <button type="button" class="clear-button" onclick="document.getElementById('fileInput').click();">
+             Обзор...
+        </button>
+        <span id="fileName">Загрузите ваш файл</span>
+        <button type="submit" class="submit-button">Отправить файл</button>
+    </form>
+
+    <script>
+        function updateFileName() {
+            var fileInput = document.getElementById('fileInput');
+            var fileNameSpan = document.getElementById('fileName');
+            if (fileInput.files.length > 0) {
+                var fileName = fileInput.files[0].name;
+                fileNameSpan.textContent = 'Выбран файл: ' + fileName;
+            }
+        }
+    </script>
+
 
     <h2>СНИЛС ОТСУТСВУЕТ!</h2>
 </body>
