@@ -1,11 +1,10 @@
-import os
-
 from flask import Flask, render_template, request, redirect
 from werkzeug.utils import secure_filename
 
 from database import session, Document
 
 app = Flask(__name__)
+
 
 def is_valid_snils(snils):
     if len(snils) != 11:
@@ -33,6 +32,7 @@ def search_snils():
     else:
         return render_template("error.html")
 
+
 @app.route('/upload', methods=["POST"])
 def upload_file():
     if 'file' not in request.files:
@@ -53,9 +53,15 @@ def read_file(file):
 
     with open(f"out_{file}", "w") as output_file:
         for line in lines:
-            modified_line = line.replace(" ", "").replace("-", "")
-            output_file.write(modified_line)
-
+            modified_line = line.replace(" ", "").replace("-", "").replace("\n", "")
+            if not is_valid_snils(modified_line):
+                output_file.write(modified_line + " НЕВЕРЕН\n")
+            elif is_valid_snils(modified_line):
+                founded = session.query(Document).filter_by(snils=modified_line).first()
+                if founded:
+                    output_file.write(modified_line + " НАЙДЕН\n")
+                else:
+                    output_file.write(modified_line + " ОТСУТСВУЕТ\n")
 
 
 if __name__ == '__main__':
