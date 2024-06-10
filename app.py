@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 from database import session, Document
 
@@ -29,6 +29,13 @@ def search_snils():
             return render_template("fail.html")
     else:
         return render_template("error.html")
+
+@app.route('/upload', methods=["POST"])
+def upload_file():
+    if 'file' not in request.files:
+        return redirect(request.url)
+    file = request.files['file']
+
 
 if __name__ == '__main__':
     app.run()
